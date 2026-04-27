@@ -39,16 +39,16 @@
 								<a href="index.html" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> Back To Home</a>
 							</div>
 							<h1>Sign In</h1>
-							<p class="account-subtitle">We'll send a confirmation code to your email.</p>								
-							<form action="index.html">
+							<p class="account-subtitle">Enter your credentials to login.</p>								
+							<form action="../../backend/login.php" method="POST" id="loginForm">
 								<div class="input-block">
 									<label class="form-label">Email <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"  placeholder="">
+									<input type="email" class="form-control" name="email" placeholder="" required>
 								</div>
 								<div class="input-block">
 									<label class="form-label">Password <span class="text-danger">*</span></label>
 									<div class="pass-group">
-										<input type="password" class="form-control pass-input" placeholder="">
+										<input type="password" class="form-control pass-input" name="password" placeholder="" required>
 										<span class="fas fa-eye-slash toggle-password"></span>
 									</div>
 								</div>								
@@ -57,11 +57,11 @@
 								</div>
 								<div class="input-block m-0">
 									<label class="custom_check d-inline-flex"><span>Remember me</span>
-										<input type="checkbox" name="remeber">
+										<input type="checkbox" name="remember">
 										<span class="checkmark"></span>
 									</label>
 								</div>
-								<a href="index.html" class="btn btn-outline-light w-100 btn-size mt-1">Sign In</a>
+								<button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">Sign In</button>
 								<div class="login-or">
 									<span class="or-line"></span>
 									<span class="span-or-log">Or, log in with your email</span>
@@ -105,6 +105,101 @@
 		
 		<!-- Custom JS -->
 		<script src="assets/js/script.js"></script>
+
+		<!-- Login Authentication Script -->
+		<script>
+			$(document).ready(function() {
+				// Handle login form submission
+				$('#loginForm').on('submit', function(e) {
+					e.preventDefault();
+					
+					var formData = new FormData(this);
+					var $form = $(this);
+					var $submitBtn = $form.find('button[type="submit"]');
+					
+					// Disable submit button and show loading state
+					$submitBtn.prop('disabled', true);
+					var originalBtnText = $submitBtn.text();
+					$submitBtn.text('Signing in...');
+					
+					$.ajax({
+						url: '../../backend/login.php',
+						type: 'POST',
+						data: formData,
+						dataType: 'json',
+						processData: false,
+						contentType: false,
+						success: function(response) {
+							if (response.success) {
+								// Store user role and ID in sessionStorage for later use
+								sessionStorage.setItem('userRole', response.user.role);
+								sessionStorage.setItem('userId', response.user.user_id);
+								sessionStorage.setItem('userName', response.user.username);
+								
+								// Redirect based on user role
+								console.log('Login successful. Role:', response.user.role);
+								console.log('Redirecting to:', response.redirect);
+								
+								// Show success message
+								showNotification('Login successful!', 'success');
+								
+								// Redirect after a short delay
+								setTimeout(function() {
+									window.location.href = response.redirect;
+								}, 500);
+							}
+						},
+						error: function(xhr) {
+							// Re-enable submit button
+							$submitBtn.prop('disabled', false);
+							$submitBtn.text(originalBtnText);
+							
+							try {
+								var response = JSON.parse(xhr.responseText);
+								showNotification(response.error || 'Login failed. Please try again.', 'error');
+							} catch(e) {
+								showNotification('An error occurred during login. Please try again.', 'error');
+							}
+						}
+					});
+				});
+				
+				// Function to display notifications
+				function showNotification(message, type) {
+					var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+					var alertHtml = '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+						message +
+						'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+						'</div>';
+					
+					// Insert alert at the top of the login form
+					$('#loginForm').before(alertHtml);
+					
+					// Auto-dismiss success alerts after 3 seconds
+					if (type === 'success') {
+						setTimeout(function() {
+							$('.alert').fadeOut(function() {
+								$(this).remove();
+							});
+						}, 3000);
+					}
+				}
+				
+				// Password visibility toggle
+				$('.toggle-password').on('click', function() {
+					var $passwordInput = $(this).siblings('.pass-input');
+					var currentType = $passwordInput.attr('type');
+					
+					if (currentType === 'password') {
+						$passwordInput.attr('type', 'text');
+						$(this).removeClass('fa-eye-slash').addClass('fa-eye');
+					} else {
+						$passwordInput.attr('type', 'password');
+						$(this).removeClass('fa-eye').addClass('fa-eye-slash');
+					}
+				});
+			});
+		</script>
 
 	</body>
 </html>

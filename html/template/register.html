@@ -40,23 +40,31 @@
 							</div>
 							<h1>Sign Up</h1>
 							<p class="account-subtitle">We'll send a confirmation code to your email.</p>								
-							<form action="index.html">
+							<form action="../../backend/register.php" method="POST">
+								<div class="input-block">
+									<label class="form-label">Select Role <span class="text-danger">*</span></label>
+									<select class="form-control" name="role" id="roleSelect" required>
+										<option value="">Choose your role...</option>
+										<option value="renter">Renter</option>
+										<option value="car_owner">Car Owner</option>
+									</select>
+								</div>
 								<div class="input-block">
 									<label class="form-label">Username <span class="text-danger">*</span></label>
-									<input type="text" class="form-control"  placeholder="">
+									<input type="text" class="form-control" name="username" placeholder="" required>
 								</div>
 								<div class="input-block">
 									<label class="form-label">Email <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"  placeholder="">
+									<input type="email" class="form-control" name="email" placeholder="" required>
 								</div>
 								<div class="input-block">
 									<label class="form-label">Password <span class="text-danger">*</span></label>
 									<div class="pass-group">
-										<input type="password" class="form-control pass-input" placeholder="">
+										<input type="password" class="form-control pass-input" name="password" placeholder="" required>
 										<span class="fas fa-eye-slash toggle-password"></span>
 									</div>
 								</div>	
-								<a href="login.html" class="btn btn-outline-light w-100 btn-size mt-1">Sign Up</a>
+								<button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">Sign Up</button>
 								<div class="login-or">
 									<span class="or-line"></span>
 									<span class="span-or">Or, Create an account with your email</span>
@@ -100,6 +108,99 @@
 		
 		<!-- Custom JS -->
 		<script src="assets/js/script.js"></script>
+
+		<!-- Registration Form Script -->
+		<script>
+			$(document).ready(function() {
+				// Handle registration form submission
+				$('form[action="../../backend/register.php"]').on('submit', function(e) {
+					e.preventDefault();
+					
+					var formData = new FormData(this);
+					var $form = $(this);
+					var $submitBtn = $form.find('button[type="submit"]');
+					
+					// Validate role selection
+					var selectedRole = $form.find('select[name="role"]').val();
+					if (!selectedRole) {
+						showNotification('Please select a role (Renter or Car Owner)', 'error');
+						return;
+					}
+					
+					// Disable submit button and show loading state
+					$submitBtn.prop('disabled', true);
+					var originalBtnText = $submitBtn.text();
+					$submitBtn.text('Creating account...');
+					
+					$.ajax({
+						url: '../../backend/register.php',
+						type: 'POST',
+						data: formData,
+						dataType: 'json',
+						processData: false,
+						contentType: false,
+						success: function(response) {
+							if (response.success) {
+								// Show success message
+								showNotification('Account created successfully! Redirecting to login...', 'success');
+								
+								// Redirect to login after a short delay
+								setTimeout(function() {
+									window.location.href = 'login.html';
+								}, 2000);
+							}
+						},
+						error: function(xhr) {
+							// Re-enable submit button
+							$submitBtn.prop('disabled', false);
+							$submitBtn.text(originalBtnText);
+							
+							try {
+								var response = JSON.parse(xhr.responseText);
+								showNotification(response.error || 'Registration failed. Please try again.', 'error');
+							} catch(e) {
+								showNotification('An error occurred during registration. Please try again.', 'error');
+							}
+						}
+					});
+				});
+				
+				// Function to display notifications
+				function showNotification(message, type) {
+					var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+					var alertHtml = '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+						message +
+						'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+						'</div>';
+					
+					// Insert alert at the top of the form
+					$('form[action="../../backend/register.php"]').before(alertHtml);
+					
+					// Auto-dismiss success alerts after 3 seconds
+					if (type === 'success') {
+						setTimeout(function() {
+							$('.alert').fadeOut(function() {
+								$(this).remove();
+							});
+						}, 3000);
+					}
+				}
+				
+				// Password visibility toggle
+				$('.toggle-password').on('click', function() {
+					var $passwordInput = $(this).siblings('.pass-input');
+					var currentType = $passwordInput.attr('type');
+					
+					if (currentType === 'password') {
+						$passwordInput.attr('type', 'text');
+						$(this).removeClass('fa-eye-slash').addClass('fa-eye');
+					} else {
+						$passwordInput.attr('type', 'password');
+						$(this).removeClass('fa-eye').addClass('fa-eye-slash');
+					}
+				});
+			});
+		</script>
 
 	</body>
 </html>

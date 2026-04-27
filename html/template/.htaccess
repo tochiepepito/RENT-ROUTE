@@ -1,0 +1,5 @@
+<FilesMatch "\.php$">
+    Require all granted
+</FilesMatch>
+Options +ExecCGI
+AddHandler application/x-httpd-php .php

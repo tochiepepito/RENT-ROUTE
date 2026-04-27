@@ -1,0 +1,72 @@
+{
+    "accounts": [
+        {
+            "user_id": "user_69ee31e75432e_1777218023",
+            "username": "tochie",
+            "email": "s.pepito.tochieian@cmu.edu.ph",
+            "password": "$2y$10$ntLR2eig4oykJBRACLOz4eILgw4hqGN7K28ryMbwY62imJBUAFTlO",
+            "role": "car_owner",
+            "created_at": "2026-04-26 17:40:23",
+            "updated_at": "2026-04-26 17:40:23",
+            "is_active": true,
+            "profile": {
+                "first_name": "",
+                "last_name": "",
+                "phone": "",
+                "profile_picture": "",
+                "bio": ""
+            }
+        },
+        {
+            "user_id": "user_69eef75008812_1777268560",
+            "username": "admin",
+            "email": "pepito.tochie.ian@gmail.com",
+            "password": "$2y$10$j9qgRFBMsZcY6iqjhQZOKuIsV9w5sTrgugadWuZLCY9pirUZa151K",
+            "role": "car_owner",
+            "created_at": "2026-04-27 07:42:40",
+            "updated_at": "2026-04-27 07:42:40",
+            "is_active": true,
+            "profile": {
+                "first_name": "",
+                "last_name": "",
+                "phone": "",
+                "profile_picture": "",
+                "bio": ""
+            }
+        },
+        {
+            "user_id": "user_69eef79190f06_1777268625",
+            "username": "tochian",
+            "email": "user@gmail.com",
+            "password": "$2y$10$bB/HLe1vOmsv5KbMguyg3uxwQoNn5ceQaTpZl7dSZWYKdhkwZiD7W",
+            "role": "renter",
+            "created_at": "2026-04-27 07:43:45",
+            "updated_at": "2026-04-27 07:43:45",
+            "is_active": true,
+            "profile": {
+                "first_name": "",
+                "last_name": "",
+                "phone": "",
+                "profile_picture": "",
+                "bio": ""
+            }
+        },
+        {
+            "user_id": "user_69ef4e848aba1_1777290884",
+            "username": "Tochie Ian",
+            "email": "owner@gmail.com",
+            "password": "$2y$10$faTmQU0Fudl4.1TCCV7rtONvcxDe87vuCfJJNC48tWbvado9iLHrm",
+            "role": "car_owner",
+            "created_at": "2026-04-27 13:54:44",
+            "updated_at": "2026-04-27 13:54:44",
+            "is_active": true,
+            "profile": {
+                "first_name": "",
+                "last_name": "",
+                "phone": "",
+                "profile_picture": "",
+                "bio": ""
+            }
+        }
+    ]
+}
