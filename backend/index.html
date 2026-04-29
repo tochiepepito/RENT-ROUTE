@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RENT&ROUTE - Database Setup</title>
+    <link rel="stylesheet" href="../html/template/assets/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        .btn-setup {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        .btn-setup.primary {
+            background-color: #667eea;
+            color: white;
+        }
+        .btn-setup.primary:hover {
+            background-color: #5568d3;
+        }
+        .btn-setup:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .checklist {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .checklist-item .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .checklist-item .status-icon.pending {
+            background-color: #ffc107;
+            color: white;
+        }
+        .checklist-item .status-icon.success {
+            background-color: #28a745;
+            color: white;
+        }
+        .checklist-item .status-icon.error {
+            background-color: #dc3545;
+            color: white;
+        }
+        .test-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn-test {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            color: #333;
+        }
+        .btn-test:hover {
+            background-color: #e9ecef;
+            border-color: #667eea;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 RENT&ROUTE</h1>
+        <p class="subtitle">Database Setup Wizard</p>
+
+        <div id="status" class="status"></div>
+
+        <button class="btn-setup primary" onclick="setupDatabase()" id="setupBtn">
+            Step 1: Create Database & Tables
+        </button>
+
+        <div class="checklist">
+            <h5 style="margin-bottom: 15px;">Setup Progress</h5>
+            <div class="checklist-item">
+                <div class="status-icon pending" id="check-db">●</div>
+                <div>Database and Tables Created</div>
+            </div>
+            <div class="checklist-item">
+                <div class="status-icon pending" id="check-config">●</div>
+                <div>Configuration Verified</div>
+            </div>
+            <div class="checklist-item">
+                <div class="status-icon pending" id="check-ready">●</div>
+                <div>System Ready for Testing</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h5 style="margin-bottom: 15px;">Next Steps</h5>
+            <div class="test-buttons">
+                <a href="../html/template/register.html" class="btn-test">
+                    📝 Register New User
+                </a>
+                <a href="../html/template/login.html" class="btn-test">
+                    🔐 Login
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>After setup, test with:</p>
+            <p>Email: test@example.com | Password: password123</p>
+            <p><a href="README.md" style="color: #667eea;">View Backend Documentation</a></p>
+        </div>
+    </div>
+
+    <script src="../html/template/assets/js/jquery-3.7.1.min.js"></script>
+    <script>
+        function setupDatabase() {
+            const btn = document.getElementById('setupBtn');
+            btn.disabled = true;
+            btn.textContent = 'Setting up...';
+
+            $.ajax({
+                url: 'db_setup.php',
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        showStatus('Database setup completed successfully!', 'success');
+                        updateChecklist('check-db', 'success');
+                        updateChecklist('check-config', 'success');
+                        updateChecklist('check-ready', 'success');
+                        btn.textContent = 'Setup Complete! ✓';
+                        btn.style.backgroundColor = '#28a745';
+                    } else {
+                        showStatus('Error: ' + response.error, 'error');
+                        updateChecklist('check-db', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Setup failed';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMsg = response.error || errorMsg;
+                    } catch(e) {}
+                    showStatus('Error: ' + errorMsg, 'error');
+                    updateChecklist('check-db', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Step 1: Create Database & Tables';
+                }
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+        }
+
+        function updateChecklist(id, status) {
+            const icon = document.getElementById(id);
+            icon.className = 'status-icon ' + status;
+            icon.textContent = status === 'success' ? '✓' : '✕';
+        }
+
+        // Check initial status
+        window.addEventListener('load', function() {
+            checkInitialStatus();
+        });
+
+        function checkInitialStatus() {
+            $.ajax({
+                url: 'check_setup.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.database_exists) {
+                        showStatus('Database already exists and is configured!', 'info');
+                        updateChecklist('check-db', 'success');
+                        updateChecklist('check-config', 'success');
+                        updateChecklist('check-ready', 'success');
+                        document.getElementById('setupBtn').textContent = 'Already Setup ✓';
+                        document.getElementById('setupBtn').disabled = true;
+                        document.getElementById('setupBtn').style.backgroundColor = '#28a745';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
